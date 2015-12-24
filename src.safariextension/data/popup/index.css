@@ -5,6 +5,7 @@ body {
   font: 12px arial,sans-serif;
   -moz-user-select: none;
   user-select: none;
+  overflow:hidden;
 }
 table {
   width: 100%;
@@ -28,6 +29,10 @@ input[type=number] {
   cursor: pointer;
   white-space: nowrap;
 }
+#urls label {
+  cursor: pointer;
+  white-space: nowrap;
+}
 #tabs label {
   display: inline-block;
   width: 100%;
@@ -38,6 +43,9 @@ input[type=number] {
 }
 #tabs input[name=proxy],
 #socks input[name=profile] {
+  display: none;
+}
+#urls input[name=pacurl] {
   display: none;
 }
 #tabs :checked + span {
@@ -56,6 +64,7 @@ body:not([data-type="3"])>#socks,
 body:not([data-type="3"])>#socks input {
   color: #aaa;
   pointer-events: none;
+  visibility:collapse;
 }
 
 #socks td:nth-child(1) {
@@ -85,6 +94,40 @@ body:not([data-type="3"])>#socks input {
   font-weight: bold;
 }
 body[data-type="3"] #socks input[name=profile]:checked + span {
+  color: #000;
+}
+
+body:not([data-type="4"])>#urls,
+body:not([data-type="4"])>#urls input {
+  color: #aaa;
+  pointer-events: none;
+  visibility:collapse;
+}
+#urls td:nth-child(1) {
+  width: 80px;
+}
+#urls td:nth-child(3) {
+  width: 70px;
+}
+#urls tr:nth-child(1) {
+  height: 30px;
+  color: #aaa;
+}
+#urls[data-type=global] tr:nth-child(4),
+#urls[data-type=global] tr:nth-child(4) input,
+#urls[data-type=global] tr:nth-child(5),
+#urls[data-type=global] tr:nth-child(5) input,
+#urls[data-type=global] tr:nth-child(6),
+#urls[data-type=global] tr:nth-child(6) input {
+  color: #aaa;
+  pointer-events: none;
+  visibility:collapse;
+}
+
+#urls input[name=profile]:checked + span {
+  font-weight: bold;
+}
+body[data-type="4"] #urls input[name=pacurl]:checked + span {
   color: #000;
 }
 
