@@ -24,10 +24,10 @@ app.popup.receive('proxy.type', function (index) {
   }
   else {
     app.proxy.type = index;
-    app.button.icon = ['gray', 'blue', 'green', 'red'][index];
+    app.button.icon = ['gray', 'blue', 'green', 'red', 'orange'][index];
   }
 });
-app.button.icon = ['gray', 'blue', 'green', 'red'][app.proxy.type];
+app.button.icon = ['gray', 'blue', 'green', 'red', 'orange'][app.proxy.type];
 
 /* attached */
 app.popup.receive('attached', function (bol) {
@@ -43,6 +43,7 @@ app.popup.receive('attached', function (bol) {
 app.popup.receive('pref-changed', function (obj) {
   app.proxy.set(obj.pref, obj.value);
   // is http attached?
+  if (app.proxy.type==3) {
   if (obj.pref === 'network.proxy.http' && config.proxy.attached) {
     app.proxy.set('network.proxy.ftp', obj.value);
     app.proxy.set('network.proxy.ssl', obj.value);
@@ -61,6 +62,10 @@ app.popup.receive('pref-changed', function (obj) {
   }
   // storing prefs in the selected profile
   app.storage.write('profile-' + config.proxy.pIndex, app.proxy.toJSON());
+  }
+  if (app.proxy.type==4) {
+    app.storage.write('pacurl-' + config.proxy.pUrlIndex, app.proxy.toUrlJSON());
+  }
 });
 app.popup.receive('pref', function (pref) {
   app.popup.send('pref', {
@@ -84,6 +89,21 @@ app.popup.receive('profile-index', function (i) {
   }
 });
 
+/* urls */
+app.popup.receive('urls', function () {
+  app.popup.send('urls', config.proxy.urls);
+});
+app.popup.receive('pacurl-index', function (i) {
+  if (i === null) {
+    app.popup.send('pacurl-index', config.proxy.pUrlIndex);
+  }
+  else {
+    config.proxy.pUrlIndex = i;
+    app.proxy.fromUrlJSON(app.storage.read('pacurl-' + config.proxy.pUrlIndex));
+    app.popup.init();
+  }
+});
+
 /* links */
 app.popup.receive('command', function (cmd) {
   switch (cmd) {
@@ -93,6 +113,10 @@ app.popup.receive('command', function (cmd) {
     break;
   case 'open-geo':
     app.tab.open(config.links.geo);
+    app.popup.hide();
+    break;
+  case 'open-isFromMainland':
+    app.tab.open('http://ipservice.163.com/isFromMainland');
     app.popup.hide();
     break;
   case 'open-leak':
@@ -109,5 +133,16 @@ app.popup.receive('command', function (cmd) {
       config.proxy.profiles = tmp.input;
     }
     app.popup.hide();
+    break;
+  case 'edit-urls':
+    var tmp = app.prompt('Edit URLs', 'Comma separated list of URLs:', config.proxy.urls);
+    if (tmp.result) {
+      config.proxy.urls = tmp.input;
+    }
+    app.popup.hide();
+    break;
+  case 'reload':
+    app.proxy.reloadPAC();
+    break;
   }
 });
