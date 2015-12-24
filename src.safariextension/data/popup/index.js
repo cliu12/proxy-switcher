@@ -110,6 +110,24 @@ document.addEventListener('click', function (e) {
   }
 });
 
+/* URLs */
+background.receive('urls', function (urls) {
+  var elems = document.querySelectorAll('[name=pacurl]');
+  urls.split(', ').forEach(function (p, i) {
+    elems[i].nextSibling.textContent = p || 'URL ' + (i + 1);
+  });
+});
+background.receive('pacurl-index', function (i) {
+  document.querySelector('[name=pacurl][value="' + i + '"]').click();
+});
+document.addEventListener('click', function (e) {
+  var target = e.target;
+  if (target.name === 'pacurl' && e.isTrusted) {
+    background.send('pacurl-index', target.value);
+  }
+});
+
+
 /* links */
 document.addEventListener('click', function (e) {
   var target = e.target;
@@ -124,6 +142,8 @@ background.receive('init', function () {
   background.send('pref', 'network.proxy.socks_version');
   background.send('profiles');
   background.send('profile-index', null);
+  background.send('urls');
+  background.send('pacurl-index', null);
   background.send('attached', null);
   [].forEach.call(document.querySelectorAll('[data-pref]'), function (elem) {
     var pref = elem.dataset.pref;
