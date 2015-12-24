@@ -5,7 +5,7 @@ var config = exports;
 
 config.popup = {
   width: 500,
-  height: 300
+  height: 400
 };
 
 config.proxy = {
@@ -24,11 +24,26 @@ config.proxy = {
     }).join(', ');
     app.storage.write('profiles', tmp);
   },
+  get urls () {
+    return app.storage.read('urls') || 'URL 1, URL 2, URL 3, URL 4, URL 5';
+  },
+  set urls (val) {
+    var tmp = val.split(/\s*\,\s*/).map(function (p) {
+      return p.trim().substr(0, 10);
+    }).join(', ');
+    app.storage.write('urls', tmp);
+  },
   get pIndex () {
     return parseInt(app.storage.read('profile-index') || '0');
   },
   set pIndex (val) {
     app.storage.write('profile-index', val);
+  },
+  get pUrlIndex () {
+    return parseInt(app.storage.read('pacurl-index') || '0');
+  },
+  set pUrlIndex (val) {
+    app.storage.write('pacurl-index', val);
   }
 };
 
