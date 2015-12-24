@@ -142,10 +142,10 @@ exports.proxy = (function () {
   });
   return {
     get type () {
-      return {0: 0, 4: 1, 5: 2, 1: 3}[prefsvc.get('network.proxy.type')] || 0;
+      return {0: 0, 4: 1, 5: 2, 1: 3, 2: 4}[prefsvc.get('network.proxy.type')] || 0;
     },
     set type (val) {
-      prefsvc.set('network.proxy.type', {0: 0, 1: 4, 2: 5, 3: 1}[val]);
+      prefsvc.set('network.proxy.type', {0: 0, 1: 4, 2: 5, 3: 1, 4: 2}[val]);
     },
     set: function (pref, value) {
       prefsvc.set(pref, value);
@@ -222,7 +222,24 @@ exports.proxy = (function () {
       }
       exports.storage.write('attached', 'attached' in tmp ? tmp.attached : true);
     }
-  };
+  }
+      toUrlJSON: function () {
+      return JSON.stringify({
+        type: prefsvc.get('network.proxy.type'),
+        pacurl: prefsvc.get('network.proxy.autoconfig_url'),
+      });
+    },
+    fromUrlJSON: function (str) {
+      var tmp = JSON.parse(str || '{}');
+
+      prefsvc.set('network.proxy.type', tmp.type || 2);
+      prefsvc.set('network.proxy.autoconfig_url', tmp.pacurl || '');
+    },
+    reloadPAC: function (){
+      Cc["@mozilla.org/network/protocol-proxy-service;1"].
+        getService().reloadPAC();
+    },
+  }
 })();
 
 exports.prompt = function (title, msg, input) {
