@@ -11,6 +11,7 @@
         <td><label><input type="radio" name="proxy" value="1"><span class="icon-">Auto-detect proxy</span></label></td>
         <td><label><input type="radio" name="proxy" value="2"><span class="icon-">System proxy</span></label></td>
         <td><label><input type="radio" name="proxy" value="3"><span class="icon-">Manual</span></label></td>
+        <td><label><input type="radio" name="proxy" value="4"><span class="icon-">Auto Config URL</span></label></td>
       </tr>
     </table>
     <table id="socks" data-type='global'>
@@ -62,10 +63,29 @@
         </td>
       </tr>
     </table>
+    <table id="urls" data-type='global'>
+      <tr>
+        <td colspan="2">
+          <label><input type="radio" name="pacurl" value="0"><span>URL 1</span></label> •
+          <label><input type="radio" name="pacurl" value="1"><span>URL 2</span></label> •
+          <label><input type="radio" name="pacurl" value="2"><span>URL 3</span></label> •
+          <label><input type="radio" name="pacurl" value="3"><span>URL 4</span></label> •
+          <label><input type="radio" name="pacurl" value="4"><span>URL 5</span></label> •
+          <label><input type="radio" name="pacurl" value="5"><span>URL 6</span></label> •
+        </td>
+        <td align="right"><a href="#" data-cmd="edit-urls">Edit</a></td>
+      </tr>
+      <tr>
+        <td>URL:</td>
+        <td><input type="text" id="pacurl" data-pref="network.proxy.autoconfig_url"></td>
+        <td><input type="button" id="reload" value="Reload" data-cmd="reload"></input></td>
+      </tr>
+    </table>
     <div id="links">
       <span>Links:</span>
       <a href="#" data-cmd="open-ip">Check external IP</a>&nbsp;|&nbsp;
       <a href="#" data-cmd="open-geo">Check GEO location</a>&nbsp;|&nbsp;
+      <a href="#" data-cmd="open-isFromMainland">isFromMainland</a>&nbsp;|&nbsp;
       <a href="#" data-cmd="open-leak">Check DNS leakage</a>&nbsp;|&nbsp;
       <a href="#" data-cmd="open-faq">Open FAQ page</a>
     </div>
